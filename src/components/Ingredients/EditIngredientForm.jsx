@@ -1,21 +1,26 @@
-import { useReducer, useState, useRef } from "react";
+import { useReducer, useState, useRef, useEffect } from "react";
 import { Text, View, TextInput, Pressable, ScrollView } from "react-native";
 import { useDispatch } from "react-redux";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
 //Actions
-import { createNewIngredient } from "../../store/actions/ingredients-actions";
+import {
+  editIngredient,
+  deleteIngredient,
+} from "../../store/actions/ingredients-actions";
 
 //Styles
-import styles from "./createIngredientFormStyles";
+import styles from "./editIngredientFormStyles";
 import MessagesModal from "../Modal/MessagesModal";
 
 //[{name, brand, unit measure, quantity, cost, unit cost, photo }]
-const categories = ["Cereal", "Cárnico", "Dulce", "Lácteo"];
-const measureUnit = ["ML", "KG"];
+import categories from "../../../data/categories.json";
+import measureUnit from "../../../data/measureUnits.json";
 
 const initialState = {
+  id: "",
   ingredientName: "",
   ingredientBrand: "",
   ingredientQuantity: "",
@@ -69,15 +74,20 @@ const formReducer = (state, action) => {
 
     return { ...newState, ingredientCostPerMeasure: 0 };
   }
-
   if (action.type === "REFRESH") {
     const newState = initialState;
     return newState;
   }
+  if (action.type === "LOAD_VALUES") {
+    const newState = state;
+    return { ...newState, ...action.value };
+  }
   return initialState;
 };
 
-const CreateIngredientForm = () => {
+const EditIngredientForm = ({ ingredient }) => {
+  const navigation = useNavigation();
+  const dispatchAction = useDispatch();
   const [state, dispatch] = useReducer(formReducer, initialState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(
@@ -86,12 +96,23 @@ const CreateIngredientForm = () => {
   const [modalIcon, setModalIcon] = useState("close-circle-outline");
   const dropDownCategoryRef = useRef({});
   const dropDownMeasureRef = useRef({});
-  const dispatchAction = useDispatch();
 
-  const onChangeName = (text) => {
-    const newText = text;
-    dispatch({ type: "CHANGE_NAME", value: newText });
-  };
+  useEffect(() => {
+    dispatch({
+      type: "LOAD_VALUES",
+      value: {
+        id: ingredient.id,
+        ingredientName: ingredient.ingredientName,
+        ingredientBrand: ingredient.ingredientBrand,
+        ingredientQuantity: String(ingredient.ingredientQuantity),
+        ingredientCost: String(ingredient.ingredientCost),
+        ingredientCostPerMeasure: ingredient.ingredientCostPerMeasure,
+        ingredientCategory: ingredient.ingredientCategory,
+        ingredientMeasurementUnit: ingredient.ingredientMeasurementUnit,
+        ingredientPhoto: "",
+      },
+    });
+  }, []);
 
   const onChangeBrand = (text) => {
     const newText = text;
@@ -127,12 +148,11 @@ const CreateIngredientForm = () => {
     dispatch({ type: "CHANGE_PHOTO", value: newText });
   };
 
-  const onSubmitHandler = () => {
-    const id = "id" + Math.random().toString(16).slice(2);
+  const onEditHandler = () => {
     const ingredientName = state.ingredientName.trim();
     const ingredientBrand = state.ingredientBrand.trim();
-    const ingredientQuantity = state.ingredientQuantity;
-    const ingredientCost = state.ingredientCost;
+    const ingredientQuantity = Number(state.ingredientQuantity);
+    const ingredientCost = Number(state.ingredientCost);
     const ingredientCostPerMeasure = Number(state.ingredientCostPerMeasure);
     const ingredientCategory = state.ingredientCategory;
     const ingredientMeasurementUnit = state.ingredientMeasurementUnit;
@@ -147,14 +167,10 @@ const CreateIngredientForm = () => {
       ingredientCategory &&
       ingredientMeasurementUnit &&
       true;
-
     if (isValid) {
-      dispatchAction(createNewIngredient({ id: id, ...state }));
-      dispatch({ type: "REFRESH" });
-      dropDownCategoryRef.current.reset();
-      dropDownMeasureRef.current.reset();
+      dispatchAction(editIngredient(state));
       setShowModal(true);
-      setModalMessage("Ingrediente creado con exito.");
+      setModalMessage("Ingrediente editado con exito.");
       setModalIcon("checkmark-circle-outline");
       setTimeout(() => {
         setShowModal(false);
@@ -169,16 +185,25 @@ const CreateIngredientForm = () => {
     }
   };
 
+  const onDeleteHandler = () => {
+    setShowModal(true);
+    setModalMessage("Ingrediente eliminado con exito.");
+    setModalIcon("checkmark-circle-outline");
+
+    setTimeout(() => {
+      setShowModal(false);
+      navigation.navigate("ingredientsList");
+      dispatchAction(deleteIngredient({ id: state.id }));
+    }, 500);
+  };
+
   return (
     <ScrollView style={styles.form}>
       {showModal && <MessagesModal message={modalMessage} icon={modalIcon} />}
       <View>
-        <TextInput
-          placeholder="Nombre"
-          style={styles.input}
-          value={state.ingredientName}
-          onChangeText={onChangeName}
-        ></TextInput>
+        <Text
+          style={{ ...styles.input, ...styles.disabled }}
+        >{`${state.ingredientName}`}</Text>
       </View>
       <View>
         <TextInput
@@ -218,6 +243,7 @@ const CreateIngredientForm = () => {
         data={categories}
         buttonStyle={styles.dropDown}
         buttonTextStyle={styles.dropDownText}
+        defaultValue={ingredient.ingredientCategory}
         // search={true}
         searchPlaceHolder="Selecciona una categoría"
         onSelect={(selectedItem, index) => {
@@ -244,6 +270,7 @@ const CreateIngredientForm = () => {
         data={measureUnit}
         buttonStyle={styles.dropDown}
         buttonTextStyle={styles.dropDownText}
+        defaultValue={ingredient.ingredientMeasurementUnit}
         // search={true}
         searchPlaceHolder="Selecciona una unidad de medida"
         onSelect={(selectedItem, index) => {
@@ -271,12 +298,19 @@ const CreateIngredientForm = () => {
       </View> */}
 
       <View style={styles.submitContainer}>
-        <Pressable style={styles.submitButton} onPress={onSubmitHandler}>
-          <Text style={styles.submit}>Guardar Ingrediente</Text>
+        <Pressable
+          style={{ ...styles.submitButton, ...styles.delete }}
+          onPress={onDeleteHandler}
+        >
+          <Text style={styles.submit}>Borrar Ingrediente</Text>
+        </Pressable>
+
+        <Pressable style={styles.submitButton} onPress={onEditHandler}>
+          <Text style={styles.submit}>Editar Ingrediente</Text>
         </Pressable>
       </View>
     </ScrollView>
   );
 };
 
-export default CreateIngredientForm;
+export default EditIngredientForm;

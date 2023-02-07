@@ -1,9 +1,13 @@
+import { useEffect } from "react";
 import { View, Text } from "react-native";
+
+//Components
+import EditIngredientForm from "../../components/Ingredients/EditIngredientForm";
 
 const EditIngredient = ({ route }) => {
   return (
     <View>
-      <Text>Pagina edit Ingredients</Text>
+      <EditIngredientForm ingredient={route.params}></EditIngredientForm>
     </View>
   );
 };

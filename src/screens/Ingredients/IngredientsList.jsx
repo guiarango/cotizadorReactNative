@@ -1,13 +1,55 @@
-import { View, Text, Button, FlatList } from "react-native";
+import { useSelector } from "react-redux";
+import { View, Text, FlatList, Pressable, Button } from "react-native";
+
+//Styles
+import styles from "./ingredientsListStyles";
+
+//Components
+import Card from "../../components/UI/Card";
+import IngredientItem from "../../components/Ingredients/IngredientItem";
+
+function sortAscending(a, b) {
+  const aUppercase = a.ingredientName.toUpperCase();
+  const bUppercase = b.ingredientName.toUpperCase();
+  if (aUppercase > bUppercase) {
+    return 1;
+  }
+  if (aUppercase < bUppercase) {
+    return -1;
+  }
+  return 0;
+}
 
 const IngredientsList = ({ navigation }) => {
+  const ingredientsList = useSelector((state) => state.ingredientsList);
+  const ingredientsSorted = [...ingredientsList].sort(sortAscending);
+
+  const renderItem = ({ item }) => {
+    return (
+      <Card>
+        <IngredientItem ingredient={item} />
+      </Card>
+    );
+  };
   return (
-    <View>
-      <Text>Pagina principal de Ingredients</Text>
-      <Button
-        title="navigate"
+    <View style={styles.container}>
+      {/* <Button
+      title="probar"
+      onPress={() => console.log(ingredientsSorted)}
+    ></Button> */}
+      <Pressable
+        style={styles.pressable}
         onPress={() => navigation.navigate("createIngredient")}
-      ></Button>
+      >
+        <Text style={styles.pressableText}>Crear Ingrediente</Text>
+      </Pressable>
+
+      <FlatList
+        data={ingredientsSorted}
+        keyExtractor={(item, index) => index}
+        renderItem={renderItem}
+        style={styles.flatList}
+      />
     </View>
   );
 };

@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
     padding: 40,
     alignItems: "center",
     shadowColor: "#000",
+    fontSize: 50,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -23,6 +24,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  modalText: {
+    fontSize: 20,
   },
   modalOptions: {
     alignSelf: "stretch",

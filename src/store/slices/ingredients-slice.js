@@ -17,6 +17,21 @@ const ingredientsList = createSlice({
         state.push(newItem);
       }
     },
+    editIngredientsFromList(state, action) {
+      const id = action.payload.id;
+      const newState = [...state];
+      const itemId = newState.findIndex((ingredient) => ingredient.id === id);
+
+      state[itemId] = action.payload;
+    },
+
+    deleteIngredientsFromList(state, action) {
+      const id = action.payload.id;
+      const newState = [...state];
+      const itemId = newState.findIndex((ingredient) => ingredient.id === id);
+
+      delete state.splice(itemId, 1);
+    },
   },
 });
 

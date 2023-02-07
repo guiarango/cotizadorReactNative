@@ -27,17 +27,21 @@ const styles = StyleSheet.create({
   },
   dropDownText: { fontSize: 16 },
   submitContainer: {
-    marginBottom: 30,
+    margin: 30,
     alignItems: "center",
-    width: "100%",
+
     marginTop: 20,
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   submitButton: {
     flex: 1,
+    margin: 5,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.primary,
-    width: "50%",
     borderRadius: 5,
     height: 50,
   },
@@ -48,6 +52,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.1,
   },
   disabled: { backgroundColor: colors.gray },
+  delete: { backgroundColor: colors.danger },
 });
 
 export default styles;

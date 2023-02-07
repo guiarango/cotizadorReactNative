@@ -7,23 +7,15 @@ import IonIcons from "@expo/vector-icons/Ionicons";
 //Import Styles
 import styles from "./MessagesModalStyles";
 
-function MessagesModal({ message, succesful }) {
-  const icon = succesful ? (
-    <IonIcons
-      name="checkmark-circle-outline"
-      size={30}
-      color="black"
-    ></IonIcons>
-  ) : (
-    <IonIcons name="close-circle-outline" size={30} color="black"></IonIcons>
-  );
-
+function MessagesModal({ message, icon }) {
   return (
-    <Modal animationType="fade" transparent={true} visible={modalVisible}>
+    <Modal animationType="fade" transparent={true} visible={true}>
       <View style={styles.modalContainer}>
         <View style={styles.modalStyle}>
-          <Text>{`${message}`}</Text>
-          <View style={styles.modalOptions}>{icon}</View>
+          <Text style={styles.modalText}>{`${message}`}</Text>
+          <View style={styles.modalOptions}>
+            <IonIcons name={icon} size={60} color="black"></IonIcons>
+          </View>
         </View>
       </View>
     </Modal>
