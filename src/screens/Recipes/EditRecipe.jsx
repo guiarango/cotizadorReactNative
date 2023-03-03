@@ -1,9 +1,12 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
+
+import EditRecipeForm from "../../components/Recipes/EditRecipeForm";
 
 const EditRecipe = ({ route }) => {
+  const recipe = route.params;
   return (
     <View>
-      <Text>Pagina edit Recipe</Text>
+      <EditRecipeForm recipe={recipe}></EditRecipeForm>
     </View>
   );
 };

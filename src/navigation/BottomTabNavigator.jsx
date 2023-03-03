@@ -25,7 +25,7 @@ const BottomTabNavigator = () => {
         tabBarStyle: styles.tabBar,
       }}
     >
-      <BottomTabs.Screen
+      {/* <BottomTabs.Screen
         name="QuotesTab"
         component={QuoteNavigator}
         options={{
@@ -43,7 +43,7 @@ const BottomTabNavigator = () => {
             styles;
           },
         }}
-      ></BottomTabs.Screen>
+      ></BottomTabs.Screen> */}
       <BottomTabs.Screen
         name="RecipesTab"
         component={RecipeNavigator}

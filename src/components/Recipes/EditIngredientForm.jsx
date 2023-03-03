@@ -1,21 +1,26 @@
-import { useReducer, useState, useRef } from "react";
+import { useReducer, useState, useRef, useEffect } from "react";
 import { Text, View, TextInput, Pressable, ScrollView } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useNavigation } from "@react-navigation/native";
 
 //Actions
-import { createNewIngredient } from "../../store/actions/ingredients-actions";
+import {
+  editIngredient,
+  deleteIngredient,
+} from "../../store/actions/ingredients-actions";
 
 //Styles
-import styles from "./createIngredientFormStyles";
+import styles from "./editIngredientFormStyles";
 import MessagesModal from "../Modal/MessagesModal";
 
 //[{name, brand, unit measure, quantity, cost, unit cost, photo }]
 import categories from "../../../data/categories.json";
-const measureUnit = ["ML", "KG"];
+import measureUnit from "../../../data/measureUnits.json";
 
 const initialState = {
+  id: "",
   ingredientName: "",
   ingredientBrand: "",
   ingredientQuantity: "",
@@ -28,36 +33,36 @@ const initialState = {
 
 const formReducer = (state, action) => {
   if (action.type === "CHANGE_NAME") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientName: action.value };
   }
   if (action.type === "CHANGE_BRAND") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientBrand: action.value };
   }
   if (action.type === "CHANGE_QUANTITY") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientQuantity: action.value };
   }
   if (action.type === "CHANGE_COST") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientCost: action.value };
   }
   if (action.type === "CHANGE_CATEGORY") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientCategory: action.value };
   }
 
   if (action.type === "CHANGE_MEASUREMENT") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientMeasurementUnit: action.value };
   }
   if (action.type === "CHANGE_PHOTO") {
-    const newState = { ...state };
+    const newState = state;
     return { ...newState, ingredientPhoto: action.value };
   }
   if (action.type === "CHANGE_COST_PER_UNIT") {
-    const newState = { ...state };
+    const newState = state;
 
     const quantity = newState.ingredientQuantity;
     const cost = newState.ingredientCost;
@@ -69,16 +74,20 @@ const formReducer = (state, action) => {
 
     return { ...newState, ingredientCostPerMeasure: 0 };
   }
-
   if (action.type === "REFRESH") {
     const newState = initialState;
     return newState;
   }
+  if (action.type === "LOAD_VALUES") {
+    const newState = state;
+    return { ...newState, ...action.value };
+  }
   return initialState;
 };
 
-const CreateIngredientForm = () => {
-  const ingredientsListSelector = useSelector((state) => state.ingredientsList);
+const EditIngredientForm = ({ ingredient }) => {
+  const navigation = useNavigation();
+  const dispatchAction = useDispatch();
   const [state, dispatch] = useReducer(formReducer, initialState);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState(
@@ -87,12 +96,23 @@ const CreateIngredientForm = () => {
   const [modalIcon, setModalIcon] = useState("close-circle-outline");
   const dropDownCategoryRef = useRef({});
   const dropDownMeasureRef = useRef({});
-  const dispatchAction = useDispatch();
 
-  const onChangeName = (text) => {
-    const newText = text;
-    dispatch({ type: "CHANGE_NAME", value: newText });
-  };
+  useEffect(() => {
+    dispatch({
+      type: "LOAD_VALUES",
+      value: {
+        id: ingredient.id,
+        ingredientName: ingredient.ingredientName,
+        ingredientBrand: ingredient.ingredientBrand,
+        ingredientQuantity: String(ingredient.ingredientQuantity),
+        ingredientCost: String(ingredient.ingredientCost),
+        ingredientCostPerMeasure: ingredient.ingredientCostPerMeasure,
+        ingredientCategory: ingredient.ingredientCategory,
+        ingredientMeasurementUnit: ingredient.ingredientMeasurementUnit,
+        ingredientPhoto: "",
+      },
+    });
+  }, []);
 
   const onChangeBrand = (text) => {
     const newText = text;
@@ -128,13 +148,11 @@ const CreateIngredientForm = () => {
     dispatch({ type: "CHANGE_PHOTO", value: newText });
   };
 
-  const onSubmitHandler = () => {
-    const id = "id" + Math.random().toString(16).slice(2);
-
+  const onEditHandler = () => {
     const ingredientName = state.ingredientName.trim();
     const ingredientBrand = state.ingredientBrand.trim();
-    const ingredientQuantity = state.ingredientQuantity;
-    const ingredientCost = state.ingredientCost;
+    const ingredientQuantity = Number(state.ingredientQuantity);
+    const ingredientCost = Number(state.ingredientCost);
     const ingredientCostPerMeasure = Number(state.ingredientCostPerMeasure);
     const ingredientCategory = state.ingredientCategory;
     const ingredientMeasurementUnit = state.ingredientMeasurementUnit;
@@ -149,40 +167,33 @@ const CreateIngredientForm = () => {
       ingredientCategory &&
       ingredientMeasurementUnit &&
       true;
-
-    const nameAlreadyExist = ingredientsListSelector.some(
-      (ingredient) => ingredient.ingredientName === ingredientName
-    );
-
-    if (nameAlreadyExist) {
-      setShowModal(true);
-      setModalMessage("El nombre del ingrediente ya existe.");
-      setModalIcon("close-circle-outline");
-      setTimeout(() => {
-        setShowModal(false);
-      }, 500);
-      return;
-    }
-
     if (isValid) {
-      dispatchAction(createNewIngredient({ id: id, ...state }));
-      dispatch({ type: "REFRESH" });
-      dropDownCategoryRef.current.reset();
-      dropDownMeasureRef.current.reset();
+      dispatchAction(editIngredient(state));
       setShowModal(true);
-      setModalMessage("Ingrediente creado con exito.");
+      setModalMessage("Ingrediente editado con exito.");
       setModalIcon("checkmark-circle-outline");
       setTimeout(() => {
         setShowModal(false);
       }, 500);
-      return;
+    } else {
+      setShowModal(true);
+      setModalMessage("Por favor diligencia todos los campos del formulario.");
+      setModalIcon("close-circle-outline");
+      setTimeout(() => {
+        setShowModal(false);
+      }, 500);
     }
+  };
 
+  const onDeleteHandler = () => {
     setShowModal(true);
-    setModalMessage("Por favor diligencia todos los campos del formulario.");
-    setModalIcon("close-circle-outline");
+    setModalMessage("Ingrediente eliminado con exito.");
+    setModalIcon("checkmark-circle-outline");
+
     setTimeout(() => {
       setShowModal(false);
+      navigation.navigate("ingredientsList");
+      dispatchAction(deleteIngredient({ id: state.id }));
     }, 500);
   };
 
@@ -190,12 +201,9 @@ const CreateIngredientForm = () => {
     <ScrollView style={styles.form}>
       {showModal && <MessagesModal message={modalMessage} icon={modalIcon} />}
       <View>
-        <TextInput
-          placeholder="Nombre"
-          style={styles.input}
-          value={state.ingredientName}
-          onChangeText={onChangeName}
-        ></TextInput>
+        <Text
+          style={{ ...styles.input, ...styles.disabled }}
+        >{`${state.ingredientName}`}</Text>
       </View>
       <View>
         <TextInput
@@ -235,7 +243,7 @@ const CreateIngredientForm = () => {
         data={categories}
         buttonStyle={styles.dropDown}
         buttonTextStyle={styles.dropDownText}
-        // search={true}
+        defaultValue={ingredient.ingredientCategory}
         searchPlaceHolder="Selecciona una categoría"
         onSelect={(selectedItem, index) => {
           onChangeCategory(selectedItem);
@@ -261,7 +269,7 @@ const CreateIngredientForm = () => {
         data={measureUnit}
         buttonStyle={styles.dropDown}
         buttonTextStyle={styles.dropDownText}
-        // search={true}
+        defaultValue={ingredient.ingredientMeasurementUnit}
         searchPlaceHolder="Selecciona una unidad de medida"
         onSelect={(selectedItem, index) => {
           onChangeMeasurementUnit(selectedItem);
@@ -281,19 +289,20 @@ const CreateIngredientForm = () => {
         dropdownIconPosition={"right"}
       />
 
-      {/* <View style={styles.selectImageContainer}>
-        <Pressable style={styles.selectImageButton}>
-          <Text style={styles.selectImageText}>Cargar imagen</Text>
-        </Pressable>
-      </View> */}
-
       <View style={styles.submitContainer}>
-        <Pressable style={styles.submitButton} onPress={onSubmitHandler}>
-          <Text style={styles.submit}>Guardar Ingrediente</Text>
+        <Pressable
+          style={{ ...styles.submitButton, ...styles.delete }}
+          onPress={onDeleteHandler}
+        >
+          <Text style={styles.submit}>Borrar Ingrediente</Text>
+        </Pressable>
+
+        <Pressable style={styles.submitButton} onPress={onEditHandler}>
+          <Text style={styles.submit}>Editar Ingrediente</Text>
         </Pressable>
       </View>
     </ScrollView>
   );
 };
 
-export default CreateIngredientForm;
+export default EditIngredientForm;

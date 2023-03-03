@@ -1,13 +1,12 @@
 import { View, Text, Button } from "react-native";
 
+//Components
+import CreateRecipeForm from "../../components/Recipes/CreateRecipeForm";
+
 const CreateRecipe = ({ navigation }) => {
   return (
     <View>
-      <Text>Pagina create Ingredients</Text>
-      <Button
-        title="navigate"
-        onPress={() => navigation.navigate("editRecipe")}
-      ></Button>
+      <CreateRecipeForm></CreateRecipeForm>
     </View>
   );
 };

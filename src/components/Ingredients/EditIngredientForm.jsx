@@ -298,15 +298,14 @@ const EditIngredientForm = ({ ingredient }) => {
       </View> */}
 
       <View style={styles.submitContainer}>
+        <Pressable style={styles.submitButton} onPress={onEditHandler}>
+          <Text style={styles.submit}>Editar Ingrediente</Text>
+        </Pressable>
         <Pressable
           style={{ ...styles.submitButton, ...styles.delete }}
           onPress={onDeleteHandler}
         >
           <Text style={styles.submit}>Borrar Ingrediente</Text>
-        </Pressable>
-
-        <Pressable style={styles.submitButton} onPress={onEditHandler}>
-          <Text style={styles.submit}>Editar Ingrediente</Text>
         </Pressable>
       </View>
     </ScrollView>

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { View, Text, FlatList, Pressable, Button } from "react-native";
+import { View, Text, FlatList, Pressable } from "react-native";
 
 //Styles
 import styles from "./ingredientsListStyles";
@@ -33,10 +33,6 @@ const IngredientsList = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      {/* <Button
-      title="probar"
-      onPress={() => console.log(ingredientsSorted)}
-    ></Button> */}
       <Pressable
         style={styles.pressable}
         onPress={() => navigation.navigate("createIngredient")}
