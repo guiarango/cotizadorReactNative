@@ -7,6 +7,7 @@ import styles from "./RecipesListStyles";
 //Components
 import Card from "../../components/UI/Card";
 import RecipeListItem from "../../components/Recipes/RecipeListItem";
+import LocationSelector from "../../components/LocationSelector/LocationSelector";
 
 function sortAscending(a, b) {
   const aUppercase = a.recipeName.toUpperCase();
@@ -33,6 +34,7 @@ const RecipesList = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
+      <LocationSelector />
       <Pressable
         style={styles.pressable}
         onPress={() => navigation.navigate("createRecipe")}
