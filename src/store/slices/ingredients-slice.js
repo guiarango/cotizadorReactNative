@@ -7,6 +7,10 @@ const ingredientsList = createSlice({
   name: "ingredientsList",
   initialState: initialState,
   reducers: {
+    setIngredientsToListByBD(state, action) {
+      const ingredients = action.payload;
+      return ingredients;
+    },
     addIngredientsToList(state, action) {
       const newItem = action.payload;
       const itemExists = state.find(

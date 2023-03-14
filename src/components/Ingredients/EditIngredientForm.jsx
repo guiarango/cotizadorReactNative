@@ -156,7 +156,6 @@ const EditIngredientForm = ({ ingredient }) => {
     const ingredientCostPerMeasure = Number(state.ingredientCostPerMeasure);
     const ingredientCategory = state.ingredientCategory;
     const ingredientMeasurementUnit = state.ingredientMeasurementUnit;
-    const ingredientPhoto = state.ingredientPhoto;
 
     const isValid =
       ingredientName !== "" &&
@@ -290,12 +289,6 @@ const EditIngredientForm = ({ ingredient }) => {
         }}
         dropdownIconPosition={"right"}
       />
-
-      {/* <View style={styles.selectImageContainer}>
-        <Pressable style={styles.selectImageButton}>
-          <Text style={styles.selectImageText}>Cargar imagen</Text>
-        </Pressable>
-      </View> */}
 
       <View style={styles.submitContainer}>
         <Pressable style={styles.submitButton} onPress={onEditHandler}>

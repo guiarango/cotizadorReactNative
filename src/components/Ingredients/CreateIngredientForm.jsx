@@ -23,7 +23,7 @@ const initialState = {
   ingredientCostPerMeasure: "",
   ingredientCategory: null,
   ingredientMeasurementUnit: null,
-  ingredientPhoto: "",
+  // ingredientPhoto: "",
 };
 
 const formReducer = (state, action) => {
@@ -129,7 +129,7 @@ const CreateIngredientForm = () => {
   };
 
   const onSubmitHandler = () => {
-    const id = "id" + Math.random().toString(16).slice(2);
+    // const id = "id" + Math.random().toString(16).slice(2);
 
     const ingredientName = state.ingredientName.trim();
     const ingredientBrand = state.ingredientBrand.trim();
@@ -138,7 +138,7 @@ const CreateIngredientForm = () => {
     const ingredientCostPerMeasure = Number(state.ingredientCostPerMeasure);
     const ingredientCategory = state.ingredientCategory;
     const ingredientMeasurementUnit = state.ingredientMeasurementUnit;
-    const ingredientPhoto = state.ingredientPhoto;
+    // const ingredientPhoto = state.ingredientPhoto;
 
     const isValid =
       ingredientName !== "" &&
@@ -165,7 +165,7 @@ const CreateIngredientForm = () => {
     }
 
     if (isValid) {
-      dispatchAction(createNewIngredient({ id: id, ...state }));
+      dispatchAction(createNewIngredient(state));
       dispatch({ type: "REFRESH" });
       dropDownCategoryRef.current.reset();
       dropDownMeasureRef.current.reset();
