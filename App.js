@@ -9,12 +9,19 @@ import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
 import store from "./src/store/index";
 
 //SQLite
-import { init, deleteTable } from "./DB/index";
+import {
+  initIngredients,
+  initRecipes,
+  initIntermediateTable,
+  deleteIngredientTable,
+  deleteRecipeTable,
+  deleteIntermediateTable,
+} from "./DB/index";
 
-init()
+initIngredients()
   .then(() => {
-    console.log("Database initialized");
-    // deleteTable()
+    console.log("Ingredients database initialized");
+    // deleteIngredientTable()
     //   .then(() => {
     //     console.log("Database dropped");
     //   })
@@ -24,7 +31,41 @@ init()
     //   });
   })
   .catch((err) => {
-    console.log("Database failed");
+    console.log("Ingredients database failed");
+    console.log(err);
+  });
+
+initRecipes()
+  .then(() => {
+    console.log("Recipes database initialized");
+    // deleteRecipeTable()
+    //   .then(() => {
+    //     console.log("Database dropped");
+    //   })
+    //   .catch((err) => {
+    //     console.log("Database not dropped");
+    //     console.log(err);
+    //   });
+  })
+  .catch((err) => {
+    console.log("Recipes database failed");
+    console.log(err);
+  });
+
+initIntermediateTable()
+  .then(() => {
+    console.log("Intermediate database initialized");
+    // deleteIntermediateTable()
+    //   .then(() => {
+    //     console.log("Database dropped");
+    //   })
+    //   .catch((err) => {
+    //     console.log("Database not dropped");
+    //     console.log(err);
+    //   });
+  })
+  .catch((err) => {
+    console.log("Intermediate database failed");
     console.log(err);
   });
 

@@ -14,9 +14,11 @@ const EditRecipeIngredientItem = ({ ingredient, onDeleteIngredient }) => {
     onDeleteIngredient(ingredient.ingredientId);
   };
 
+  console.log(ingredient);
+
   return (
     <View>
-      <Text style={styles.recipeName}>{item[0].ingredientName}</Text>
+      <Text style={styles.recipeName}>{ingredient.ingredientName}</Text>
       <View style={styles.infoContainer}>
         <View style={styles.infoRecipe}>
           <Text style={styles.ingredientText}>

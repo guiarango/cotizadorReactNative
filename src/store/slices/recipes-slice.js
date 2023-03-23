@@ -7,6 +7,11 @@ const recipesList = createSlice({
   name: "recipesList",
   initialState: initialState,
   reducers: {
+    setRecipesToListByBD(state, action) {
+      const recipes = action.payload;
+      return recipes;
+    },
+
     addRecipesToList(state, action) {
       const newRecipe = action.payload;
       const recipeExists = state.find(

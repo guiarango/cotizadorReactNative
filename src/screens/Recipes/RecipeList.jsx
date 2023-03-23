@@ -1,4 +1,5 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { View, Text, FlatList, Pressable } from "react-native";
 
 //Styles
@@ -7,7 +8,8 @@ import styles from "./RecipesListStyles";
 //Components
 import Card from "../../components/UI/Card";
 import RecipeListItem from "../../components/Recipes/RecipeListItem";
-import LocationSelector from "../../components/LocationSelector/LocationSelector";
+import { getRecipesFromDB } from "../../store/actions/recipes-actions";
+// import LocationSelector from "../../components/LocationSelector/LocationSelector";
 
 function sortAscending(a, b) {
   const aUppercase = a.recipeName.toUpperCase();
@@ -22,8 +24,13 @@ function sortAscending(a, b) {
 }
 
 const RecipesList = ({ navigation }) => {
+  const dispatchAction = useDispatch();
   const recipesList = useSelector((state) => state.recipesList);
   const recipesSorted = [...recipesList].sort(sortAscending);
+
+  useEffect(() => {
+    dispatchAction(getRecipesFromDB());
+  }, []);
 
   const renderItem = ({ item }) => {
     return (
@@ -34,7 +41,7 @@ const RecipesList = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <LocationSelector />
+      {/* <LocationSelector /> */}
       <Pressable
         style={styles.pressable}
         onPress={() => navigation.navigate("createRecipe")}

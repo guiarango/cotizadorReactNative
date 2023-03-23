@@ -25,25 +25,6 @@ const BottomTabNavigator = () => {
         tabBarStyle: styles.tabBar,
       }}
     >
-      {/* <BottomTabs.Screen
-        name="QuotesTab"
-        component={QuoteNavigator}
-        options={{
-          tabBarIcon: () => {
-            return (
-              <View style={styles.icon}>
-                <IonIcons
-                  name="md-wallet-outline"
-                  size={30}
-                  color="black"
-                ></IonIcons>
-                <Text>Cotizaciones</Text>
-              </View>
-            );
-            styles;
-          },
-        }}
-      ></BottomTabs.Screen> */}
       <BottomTabs.Screen
         name="RecipesTab"
         component={RecipeNavigator}

@@ -6,7 +6,6 @@ import {
   deleteIngredientFromDB,
   updateIngredient,
 } from "../../../DB/index";
-import { compose } from "@reduxjs/toolkit";
 
 export const getIngredientsFromDB = () => {
   return async (dispatch) => {

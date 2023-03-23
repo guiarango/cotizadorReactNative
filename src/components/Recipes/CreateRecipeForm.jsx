@@ -101,7 +101,7 @@ const CreateRecipeForm = () => {
   };
 
   const onSubmitHandler = () => {
-    const id = "id" + Math.random().toString(16).slice(2);
+    // const id = "id" + Math.random().toString(16).slice(2);
     const isValid = newRecipeName !== "" && newRecipe.length > 0 && true;
     const nameAlreadyExist = recipesListSelector.some(
       (recipe) => recipe.recipeName === newRecipeName
@@ -120,7 +120,6 @@ const CreateRecipeForm = () => {
     if (isValid) {
       dispatchAction(
         createNewRecipe({
-          id: id,
           recipeName: newRecipeName,
           ingredients: newRecipe,
         })
