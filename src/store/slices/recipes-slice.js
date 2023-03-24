@@ -26,9 +26,7 @@ const recipesList = createSlice({
     editRecipe(state, action) {
       const recipeId = action.payload.id;
       const ingredients = action.payload.ingredients;
-
       const recipeItem = state.find((recipe) => recipe.id === recipeId);
-
       recipeItem.ingredients = ingredients;
     },
 

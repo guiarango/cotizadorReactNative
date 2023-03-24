@@ -204,23 +204,23 @@ export const insertRecipe = (name) => {
   return promise;
 };
 
-// export const deleteRecipeFromDB = (id) => {
-//   const promise = new Promise((resolve, reject) => {
-//     db.transaction((tx) => {
-//       tx.executeSql(
-//         `DELETE FROM recipes WHERE id=?;`,
-//         [id.id],
-//         (_, result) => {
-//           resolve(result);
-//         },
-//         (_, err) => {
-//           reject(err);
-//         }
-//       );
-//     });
-//   });
-//   return promise;
-// };
+export const deleteRecipeFromDB = (id) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM recipes WHERE id=?;`,
+        [id.id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
 
 export const deleteRecipeTable = () => {
   const promise = new Promise((resolve, reject) => {
@@ -264,23 +264,23 @@ export const insertIntermediateTableItems = (
   return promise;
 };
 
-// export const deleteRecipeFromDB = (id) => {
-//   const promise = new Promise((resolve, reject) => {
-//     db.transaction((tx) => {
-//       tx.executeSql(
-//         `DELETE FROM recipes WHERE id=?;`,
-//         [id.id],
-//         (_, result) => {
-//           resolve(result);
-//         },
-//         (_, err) => {
-//           reject(err);
-//         }
-//       );
-//     });
-//   });
-//   return promise;
-// };
+export const deleteRecipeFromIntermediateDB = (id) => {
+  const promise = new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        `DELETE FROM intermediateTable WHERE recipeId=?;`,
+        [id.id],
+        (_, result) => {
+          resolve(result);
+        },
+        (_, err) => {
+          reject(err);
+        }
+      );
+    });
+  });
+  return promise;
+};
 
 export const deleteIntermediateTable = () => {
   const promise = new Promise((resolve, reject) => {

@@ -30,9 +30,15 @@ const initialState = {
   ingredientId: "",
   ingredientCategory: "",
   ingredientQuantity: "",
+  ingredientName: "",
 };
 
 const formReducer = (state, action) => {
+  if (action.type === "CHANGE_INGREDIENT_NAME") {
+    const newState = { ...state };
+    return { ...newState, ingredientName: action.value };
+  }
+
   if (action.type === "CHANGE_NAME") {
     const newState = { ...state };
     return { ...newState, ingredientId: action.value };
@@ -85,8 +91,10 @@ const CreateRecipeForm = () => {
     setIngredientsList(ingredientsListFiltered);
   };
   const onChangeIngredientName = (text) => {
+    dispatch({ type: "CHANGE_INGREDIENT_NAME", value: text.ingredientName });
     dispatch({ type: "CHANGE_NAME", value: text.id });
   };
+
   const onChangeQuantity = (text) => {
     const newText = Number(text);
     dispatch({ type: "CHANGE_QUANTITY", value: newText });
@@ -101,7 +109,6 @@ const CreateRecipeForm = () => {
   };
 
   const onSubmitHandler = () => {
-    // const id = "id" + Math.random().toString(16).slice(2);
     const isValid = newRecipeName !== "" && newRecipe.length > 0 && true;
     const nameAlreadyExist = recipesListSelector.some(
       (recipe) => recipe.recipeName === newRecipeName

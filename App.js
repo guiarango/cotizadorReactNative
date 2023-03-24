@@ -2,6 +2,10 @@ import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 
+//Initializa firebase
+import { init } from "./src/services/sevices";
+init();
+
 //Import Navigator
 import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
 

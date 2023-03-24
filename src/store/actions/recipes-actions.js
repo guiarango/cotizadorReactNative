@@ -5,6 +5,7 @@ import {
   insertRecipe,
   deleteRecipeFromDB,
   insertIntermediateTableItems,
+  deleteRecipeFromIntermediateDB,
 } from "../../../DB/index";
 
 export const getRecipesFromDB = () => {
@@ -67,8 +68,30 @@ export const editRecipe = (recipeData) => {
   };
 };
 
+export const updateIngredientsOnIntermediateDB = (recipeData) => {
+  return async (dispatch) => {
+    await deleteRecipeFromIntermediateDB(recipeData);
+
+    recipeData.ingredients.map(async (ingredient) => {
+      const id = recipeData.id;
+      const ingredientId = ingredient.ingredientId;
+      const ingredientQuantity = ingredient.ingredientQuantity;
+
+      return await insertIntermediateTableItems(
+        id,
+        ingredientId,
+        ingredientQuantity
+      );
+    });
+
+    dispatch(recipesActions.editRecipe(recipeData));
+  };
+};
+
 export const deleteRecipe = (recipeData) => {
-  return (dispatch) => {
+  return async (dispatch) => {
+    await deleteRecipeFromDB(recipeData);
+    await deleteRecipeFromIntermediateDB(recipeData);
     dispatch(recipesActions.deleteRecipe(recipeData));
   };
 };

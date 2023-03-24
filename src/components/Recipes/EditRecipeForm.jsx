@@ -13,7 +13,10 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 
 //Actions
-import { editRecipe, deleteRecipe } from "../../store/actions/recipes-actions";
+import {
+  deleteRecipe,
+  updateIngredientsOnIntermediateDB,
+} from "../../store/actions/recipes-actions";
 
 //Components
 import EditRecipeIngredientItem from "./EditRecipeIngredientItem";
@@ -29,6 +32,7 @@ import categories from "../../../data/categories.json";
 const initialState = {
   ingredientId: "",
   ingredientCategory: "",
+  ingredientName: "",
   ingredientQuantity: "",
 };
 
@@ -36,6 +40,11 @@ const formReducer = (state, action) => {
   if (action.type === "CHANGE_NAME") {
     const newState = { ...state };
     return { ...newState, ingredientId: action.value };
+  }
+
+  if (action.type === "CHANGE_INGREDIENT_NAME") {
+    const newState = { ...state };
+    return { ...newState, ingredientName: action.value };
   }
 
   if (action.type === "CHANGE_CATEGORY") {
@@ -79,6 +88,7 @@ const EditRecipeForm = ({ recipe }) => {
     setIngredientsList(ingredientsListFiltered);
   };
   const onChangeIngredientName = (text) => {
+    dispatch({ type: "CHANGE_INGREDIENT_NAME", value: text.ingredientName });
     dispatch({ type: "CHANGE_NAME", value: text.id });
   };
   const onChangeQuantity = (text) => {
@@ -100,7 +110,12 @@ const EditRecipeForm = ({ recipe }) => {
     const isValid = newRecipe.length > 0 && true;
 
     if (isValid) {
-      dispatchAction(editRecipe({ id: recipe.id, ingredients: newRecipe }));
+      dispatchAction(
+        updateIngredientsOnIntermediateDB({
+          id: recipe.id,
+          ingredients: newRecipe,
+        })
+      );
       setShowModal(true);
       setModalMessage("Receta editada con exito.");
       setModalIcon("checkmark-circle-outline");

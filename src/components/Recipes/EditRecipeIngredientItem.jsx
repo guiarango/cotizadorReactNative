@@ -1,20 +1,18 @@
 import { Text, View, Pressable } from "react-native";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 import styles from "./RecipeIngredientItemStyles";
 
 const EditRecipeIngredientItem = ({ ingredient, onDeleteIngredient }) => {
-  const ingredientsListSelector = useSelector((state) => state.ingredientsList);
-  const idIngredient = ingredient.ingredientId;
-  const item = ingredientsListSelector.filter(
-    (ingredientItem) => ingredientItem.id == idIngredient
-  );
+  // const ingredientsListSelector = useSelector((state) => state.ingredientsList);
+  // const idIngredient = ingredient.ingredientId;
+  // const [item] = ingredientsListSelector.filter(
+  //   (ingredientItem) => ingredientItem.id == idIngredient
+  // );
 
   const onDeleteItem = () => {
     onDeleteIngredient(ingredient.ingredientId);
   };
-
-  console.log(ingredient);
 
   return (
     <View>

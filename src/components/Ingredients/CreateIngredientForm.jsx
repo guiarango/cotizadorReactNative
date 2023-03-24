@@ -1,4 +1,4 @@
-import { useReducer, useState, useRef } from "react";
+import { useReducer, useState, useRef, useEffect } from "react";
 import { Text, View, TextInput, Pressable, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import SelectDropdown from "react-native-select-dropdown";
@@ -10,10 +10,11 @@ import { createNewIngredient } from "../../store/actions/ingredients-actions";
 //Styles
 import styles from "./createIngredientFormStyles";
 import MessagesModal from "../Modal/MessagesModal";
+import { fetchCategories, fetchMeasureUnits } from "../../services/sevices";
 
 //[{name, brand, unit measure, quantity, cost, unit cost, photo }]
-import categories from "../../../data/categories.json";
-const measureUnit = ["ML", "KG"];
+// import categories from "../../../data/categories.json";
+// const measureUnit = ["ML", "KG"];
 
 const initialState = {
   ingredientName: "",
@@ -88,6 +89,19 @@ const CreateIngredientForm = () => {
   const dropDownCategoryRef = useRef({});
   const dropDownMeasureRef = useRef({});
   const dispatchAction = useDispatch();
+  const [categories, setCategories] = useState("");
+  const [measureUnit, setMeasureUnit] = useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      const categoriesFetched = await fetchCategories();
+      const measureUnitFetched = await fetchMeasureUnits();
+
+      setCategories(Object.values(categoriesFetched));
+      setMeasureUnit(Object.values(measureUnitFetched));
+    }
+    fetchData();
+  }, []);
 
   const onChangeName = (text) => {
     const newText = text;

@@ -5,6 +5,9 @@ import SelectDropdown from "react-native-select-dropdown";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 
+//Services
+import { fetchCategories, fetchMeasureUnits } from "../../services/sevices";
+
 //Actions
 import {
   editIngredient,
@@ -16,8 +19,8 @@ import styles from "./editIngredientFormStyles";
 import MessagesModal from "../Modal/MessagesModal";
 
 //[{name, brand, unit measure, quantity, cost, unit cost, photo }]
-import categories from "../../../data/categories.json";
-import measureUnit from "../../../data/measureUnits.json";
+// import categories from "../../../data/categories.json";
+// import measureUnit from "../../../data/measureUnits.json";
 
 const initialState = {
   id: "",
@@ -96,6 +99,19 @@ const EditIngredientForm = ({ ingredient }) => {
   const [modalIcon, setModalIcon] = useState("close-circle-outline");
   const dropDownCategoryRef = useRef({});
   const dropDownMeasureRef = useRef({});
+  const [categories, setCategories] = useState("");
+  const [measureUnit, setMeasureUnit] = useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      const categoriesFetched = await fetchCategories();
+      const measureUnitFetched = await fetchMeasureUnits();
+
+      setCategories(Object.values(categoriesFetched));
+      setMeasureUnit(Object.values(measureUnitFetched));
+    }
+    fetchData();
+  }, []);
 
   useEffect(() => {
     dispatch({
