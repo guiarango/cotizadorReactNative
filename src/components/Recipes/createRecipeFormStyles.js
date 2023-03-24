@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
   },
+  form: { marginBottom: 50 },
   input: {
     shadowOffset: { width: 0, height: 0 },
     marginBottom: 12,

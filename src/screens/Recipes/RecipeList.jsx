@@ -9,7 +9,8 @@ import styles from "./RecipesListStyles";
 import Card from "../../components/UI/Card";
 import RecipeListItem from "../../components/Recipes/RecipeListItem";
 import { getRecipesFromDB } from "../../store/actions/recipes-actions";
-// import LocationSelector from "../../components/LocationSelector/LocationSelector";
+import { getIngredientsFromDB } from "../../../src/store/actions/ingredients-actions";
+import LocationSelector from "../../components/LocationSelector/LocationSelector";
 
 function sortAscending(a, b) {
   const aUppercase = a.recipeName.toUpperCase();
@@ -29,6 +30,7 @@ const RecipesList = ({ navigation }) => {
   const recipesSorted = [...recipesList].sort(sortAscending);
 
   useEffect(() => {
+    dispatchAction(getIngredientsFromDB());
     dispatchAction(getRecipesFromDB());
   }, []);
 
@@ -41,7 +43,7 @@ const RecipesList = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      {/* <LocationSelector /> */}
+      <LocationSelector />
       <Pressable
         style={styles.pressable}
         onPress={() => navigation.navigate("createRecipe")}

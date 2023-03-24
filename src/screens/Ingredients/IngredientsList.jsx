@@ -10,7 +10,7 @@ import Card from "../../components/UI/Card";
 import IngredientItem from "../../components/Ingredients/IngredientItem";
 
 //DB
-import { getIngredientsFromDB } from "../../../src/store/actions/ingredients-actions";
+// import { getIngredientsFromDB } from "../../../src/store/actions/ingredients-actions";
 
 function sortAscending(a, b) {
   const aUppercase = a.ingredientName.toUpperCase();
@@ -28,9 +28,9 @@ const IngredientsList = ({ navigation }) => {
   const dispatchAction = useDispatch();
   const ingredientsList = useSelector((state) => state.ingredientsList);
   const ingredientsSorted = [...ingredientsList].sort(sortAscending);
-  useEffect(() => {
-    dispatchAction(getIngredientsFromDB());
-  }, []);
+  // useEffect(() => {
+  //   dispatchAction(getIngredientsFromDB());
+  // }, []);
 
   // console.log(ingredientsList);
 

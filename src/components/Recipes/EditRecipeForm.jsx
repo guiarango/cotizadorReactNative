@@ -1,4 +1,4 @@
-import { useReducer, useState, useRef } from "react";
+import { useReducer, useState, useRef, useEffect } from "react";
 import {
   Text,
   View,
@@ -27,7 +27,7 @@ import styles from "./createRecipeFormStyles";
 import MessagesModal from "../Modal/MessagesModal";
 
 //Get Categories
-import categories from "../../../data/categories.json";
+import { fetchCategories } from "../../services/sevices";
 
 const initialState = {
   ingredientId: "",
@@ -79,6 +79,17 @@ const EditRecipeForm = ({ recipe }) => {
   const [modalIcon, setModalIcon] = useState("close-circle-outline");
   const dropDownCategoryRef = useRef({});
   const dropDownNameRef = useRef({});
+
+  const [categories, setCategories] = useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      const categoriesFetched = await fetchCategories();
+
+      setCategories(Object.values(categoriesFetched));
+    }
+    fetchData();
+  }, []);
 
   const onChangeCategory = (text) => {
     dispatch({ type: "CHANGE_CATEGORY", value: text });
